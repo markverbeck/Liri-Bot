@@ -1,4 +1,4 @@
-
+[]
 
 var twitterKeys = {
   consumer_key: 'uxudZoVbWOj0U6ZiUIPIsPFSd',
