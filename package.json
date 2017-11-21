@@ -3,11 +3,6 @@
   "version": "1.0.0",
   "description": "",
   "main": "keys.js",
-  "dependencies": {
-    "node-spotify-api": "^1.0.7",
-    "twitter": "^1.7.1"
-  },
-  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -15,10 +10,15 @@
     "type": "git",
     "url": "git+https://github.com/markverbeck/Liri-Bot.git"
   },
-  "author": "Mark Verbeck",
+  "author": "",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/markverbeck/Liri-Bot/issues"
   },
-  "homepage": "https://github.com/markverbeck/Liri-Bot#readme"
+  "homepage": "https://github.com/markverbeck/Liri-Bot#readme",
+  "dependencies": {
+    "moment": "^2.19.2",
+    "node-spotify-api": "^1.0.7",
+    "twitter": "^1.7.1"
+  }
 }

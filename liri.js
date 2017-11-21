@@ -2,13 +2,20 @@ var keys = require("./keys.js");
 var twitter = require('twitter');
 var Spotify = require('node-spotify-api');
 var request = require("request");
+var fs = require("fs");
+var moment = require('moment');
 var arg2 = process.argv;
 var arg1 = arg2[2];
 var choiceName = "";
+var date = moment().format("dddd, MMMM Do YYYY, h:mm:ss a");
+
+
+
 
 for (var i = 3; i < arg2.length; i++) {
 	choiceName = choiceName + "+" + arg2[i];
 }
+var logEntry ="* " + arg1 + " " + choiceName + " " + date + "\n";
 
 // Twitter
 var client = new twitter({
@@ -18,7 +25,7 @@ var client = new twitter({
   access_token_secret: keys.access_token_secret
 });
 
-if(arg1 === "my-tweets"){
+var twitter = function(){
 var params = {screen_name: 'mvtatertot', count: 20};
 client.get('statuses/user_timeline', params, function(error, tweets, response) {
   if (!error) {
@@ -40,19 +47,21 @@ var spotify = new Spotify({
   secret: "952b5eefd0674d82997e686973a8449e"
 });
 
-	if(arg1 === "spotify-this-song"){
-		if(choiceName === undefined);{
-			choiceName = "cissy strut";
-		}
+var spotifyRun = function(){
+	if(choiceName === ""){
+		choiceName = "cissy strut";
+	}
  
-spotify.search({ type: 'track', query: choiceName , limit: 20}, function(err, data) {
-  if (err) {
-    return console.log('Error occurred: ' + err);
-  }
+	spotify.search({ type: 'track', query: choiceName , limit: 20}, function(err, data) {
+  		if (err) {
+    		return console.log('Error occurred: ' + err);
+  		}
   
  	var items = data.tracks.items;
 
  	 for (var i = 0; i < items.length; i++) {
+ 	 	console.log("");
+ 	 	console.log("==========================================================================================")
  		console.log("Artist: " + data.tracks.items[i].artists[0].name)
  		console.log("")
  		console.log("Album: " + data.tracks.items[i].album.name);
@@ -71,7 +80,7 @@ spotify.search({ type: 'track', query: choiceName , limit: 20}, function(err, da
 // OMDB
 
 
-if (arg1 === "movie-this"){
+var omdb = function(){
 	if (choiceName === ""){
 		choiceName = "Mr. Nobody"
 	}
@@ -102,4 +111,39 @@ if (arg1 === "movie-this"){
 		console.log("");
 	});
 };
+
+fs.appendFile("log.txt", logEntry, function(err){
+	if(err){
+		console.log(err);
+	}
+	console.log("Log Updated..")
+})
+
+var runCommand = function(a){
+	switch(a){
+		case "my-tweets":
+			twitter();
+			break;
+		case "spotify-this-song":
+			spotifyRun();
+			break;
+		case "movie-this":
+			omdb();
+			break;
+		case "do-what-it-says":
+		fs.readFile("random.txt", "utf8", function(err, data){
+			if(err){
+				console.log(err);
+			}
+			var info = data.split(",");
+			arg1 = info[0];
+			choiceName = info[1];
+			runCommand(arg1);
+		})
+	}
+
+}
+
+runCommand(arg1);
+debugger;
 
